@@ -11,9 +11,14 @@ function configure {
     cp dot/.tmux.conf "$HOME/"
     cp dot/.gitconfig "$HOME/"
     cp dot/.inputrc "$HOME/"
+    cp dot/.emacs-profiles.el "$HOME/"
     cp -r dot/.todo "$HOME/"
 
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+    git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
+
+    ghq get git@github.com:FiV0/emacs-config.git
 
     show_success 'Copied dotfiles to home directory.'
     whiptail --title "Finished" --msgbox "dot files copied successfully." 8 78
