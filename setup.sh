@@ -62,7 +62,6 @@ DIR="$(dirname "$0")"
 . $DIR/functions/doall
 . $DIR/functions/packages
 . $DIR/functions/aur
-. $DIR/functions/r-packages
 
 # Main
 function main {
@@ -75,10 +74,9 @@ function main {
         doall       '1. Do all (non-interactive)' \
         packages    '2. Install pacman packages' \
         aurpackages '3. Install AUR packages' \
-        rpackages   '4. Install R packages' \
-        configure   '5. Configure system' \
+        configure   '4. Configure system' \
         3>&1 1>&2 2>&3)
-     
+
     exitstatus=$?
     if [ $exitstatus = 0 ]; then
         $MAIN

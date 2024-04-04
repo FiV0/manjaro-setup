@@ -4,7 +4,6 @@
 function doall {
     packages
     aurpackages
-    rpackages
     configure
 
     show_success 'Done.'
