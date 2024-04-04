@@ -1,20 +1,14 @@
 [user]
-    name = Andreas Petutschnig
-    email = andreas@petutschnig.de
+	name = Finn Völkel
+	email = finn.volkel@gmail.com
+[ghq]
+	root = "~/src"
 [core]
-	autocrlf = input
-	safecrlf = true
-[alias]
-    co = checkout
-    ci = commit
-    st = status -uno
-    br = branch
-    hist = log --graph --all --date=short --pretty=format:'%Cred%h%Creset%x09%ad - %Cgreen%d%Cblue%s%Creset'
-    type = cat-file -t
-    dump = cat-file -p
-
-[push]
-    default = simple
-
+	editor = emacs
 [credential]
-	helper = /usr/share/git/credential/gnome-keyring/git-credential-gnome-keyring
+	helper = store
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
