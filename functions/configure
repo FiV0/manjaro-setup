@@ -15,16 +15,6 @@ function configure {
 
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
-    sudo chown -R andreas:andreas /lib/R
-
-    git clone https://github.com/matze/mtheme ~/mtheme
-    make sty -C ~/mtheme
-    make install -C ~/mtheme
-    rm -rf ~/mtheme
-
-    cd /usr/share/git/credential/gnome-keyring/
-    sudo make
-
     show_success 'Copied dotfiles to home directory.'
     whiptail --title "Finished" --msgbox "dot files copied successfully." 8 78
     main
