@@ -2,3 +2,4 @@
 
 PKGS="$DIR/data/pacman-packages.list"
 AURPKGS="$DIR/data/aur-packages.list"
+EMAIL="finn.volkel@gmail.com"

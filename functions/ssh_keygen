@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Install packages listed in 'data/aur-packages.list'
+function ssh-keygen
+{
+    show_info 'Generating new ssh key...'
+    ssh-keygen -t ed25519 -N "" -C $EMAIL
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_ed25519
+    show_info 'Copy the following public to Github, Gitlab, etc. '
+    cat ~/.ssh/id_ed25519.pub
+    show_info 'Press enter to continue'
+    read -p
+    main
+}

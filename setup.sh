@@ -62,6 +62,7 @@ DIR="$(dirname "$0")"
 . $DIR/functions/doall
 . $DIR/functions/packages
 . $DIR/functions/aur
+. $DIR/functions/ssh_keygen
 
 # Main
 function main {
@@ -74,7 +75,8 @@ function main {
         doall       '1. Do all (non-interactive)' \
         packages    '2. Install pacman packages' \
         aurpackages '3. Install AUR packages' \
-        configure   '4. Configure system' \
+        ssh-keygen  '4. Generate a new ssh key' \
+        configure   '5. Configure system' \
         3>&1 1>&2 2>&3)
 
     exitstatus=$?
