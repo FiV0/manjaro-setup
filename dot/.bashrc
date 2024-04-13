@@ -2,226 +2,36 @@
 # ~/.bashrc
 #
 
-if [ -n "$DISPLAY" ]; then
-  xset b off
-fi
-
+# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export QT_SCALE_FACTOR=1
-export EDITOR=vim
-export TERM=xterm-256color
-export PGUSER=postgres
+alias ls='ls --color=auto'
+#PS1="\e\[\033[01;32m\][\u@\h \W]\$ \e[m"
+PS1='[\u@\h \W]\$ '
 
-colors() {
-	local fgc bgc vals seq0
+# fzf
+source /usr/share//fzf/key-bindings.bash
+source /usr/share//fzf/completion.bash
+# fd + fzf
+export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# export FZF_ALT_C_COMMAND="fd -H -t d . $HOME"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
 
-	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
-	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
-	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
-	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+# git completions
+source /usr/share/git/completion/git-completion.bash
 
-	# foreground colors
-	for fgc in {30..37}; do
-		# background colors
-		for bgc in {40..47}; do
-			fgc=${fgc#37} # white
-			bgc=${bgc#40} # black
+alias rm="mv -t ~/.local/share/Trash/files"
+alias vi="vim"
 
-			vals="${fgc:+$fgc;}${bgc}"
-			vals=${vals%%;}
+# flush history after every command
+export PROMPT_COMMAND='history -a; printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"'
 
-			seq0="${vals:+\e[${vals}m}"
-			printf "  %-9s" "${seq0:-(default)}"
-			printf " ${seq0}TEXT\e[m"
-			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
-		done
-		echo; echo
-	done
-}
+HISTSIZE=20000
+HISTFILESIZE=20000
 
-[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+# local executables
+export PATH="$HOME/.local/bin:$PATH"
 
-# Change the window title of X terminals
-case ${TERM} in
-	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
-		PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
-		;;
-	screen*)
-		PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
-		;;
-esac
-
-use_color=true
-
-# Set colorful PS1 only on colorful terminals.
-# dircolors --print-database uses its own built-in database
-# instead of using /etc/DIR_COLORS.  Try to use the external file
-# first to take advantage of user additions.  Use internal bash
-# globbing instead of external grep binary.
-safe_term=${TERM//[^[:alnum:]]/?}   # sanitize TERM
-match_lhs=""
-[[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
-[[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
-[[ -z ${match_lhs}    ]] \
-	&& type -P dircolors >/dev/null \
-	&& match_lhs=$(dircolors --print-database)
-[[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
-
-if ${use_color} ; then
-	# Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
-	if type -P dircolors >/dev/null ; then
-		if [[ -f ~/.dir_colors ]] ; then
-			eval $(dircolors -b ~/.dir_colors)
-		elif [[ -f /etc/DIR_COLORS ]] ; then
-			eval $(dircolors -b /etc/DIR_COLORS)
-		fi
-	fi
-
-	if [[ ${EUID} == 0 ]] ; then
-		PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
-	else
-		PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
-	fi
-
-	alias ls='ls --color=auto'
-	alias grep='grep --colour=auto'
-	alias egrep='egrep --colour=auto'
-	alias fgrep='fgrep --colour=auto'
-else
-	if [[ ${EUID} == 0 ]] ; then
-		# show root@ when we don't have colors
-		PS1='\u@\h \W \$ '
-	else
-		PS1='\u@\h \w \$ '
-	fi
-fi
-
-unset use_color safe_term match_lhs sh
-
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='vim -w PKGBUILD'
-alias more=less
-alias up='cd ..'
-alias desktop='cd ~/Desktop'
-alias desk='cd ~/Desktop'
-alias doc='cd ~/Documents'
-alias down='cd ~/Downloads'
-alias replaceAllSpaces='for file in *; do mv "$file" `echo $file | tr " " "_"` ; done'
-alias generatePassword='apg -m 20 -x 1 -M SNCL -a 1 -n 1'
-alias histg='history | grep'
-#dump clipboard to file
-alias dclip='xclip -o > clipboard.txt'
-alias t='todo.sh -t -d ~/.todo/config'
-alias rupdate='echo "update.packages (ask = FALSE, checkBuilt = TRUE)" | R --no-save -q'
-alias lll='du -chs *'
-alias ll='ls -lFh'
-alias la='ls -lFhA'
-alias latest='ls -lFhAt | head'
-alias l='ls -CF'
-alias g='grep'
-alias gi='grep -i'
-alias agi='ag -i'
-alias shutdown='sudo shutdown now'
-alias reboot='sudo reboot'
-alias run='xdg-open'
-alias condasession='source /opt/anaconda/bin/activate'
-alias git_showorigin='git config --get remote.origin.url'
-alias ffplay='ffplay -nodisp -autoexit'
-alias yay_upgrade='yay -Quq | while read p; do yes | yay -S $p || echo $p >> yay-failed.log; done'
-alias pwdcopy='pwd | xclip'
-
-xhost +local:root > /dev/null 2>&1
-
-complete -cf sudo
-
-# Bash won't get SIGWINCH if another process is in the foreground.
-# Enable checkwinsize so that bash will check the terminal size when
-# it regains control.  #65623
-# http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
-
-shopt -s expand_aliases
-
-# export QT_SELECT=4
-
-# Enable history appending instead of overwriting.  #139609
-shopt -s histappend
-
-#
-# # ex - archive extractor
-# # usage: ex <file>
-ex ()
-{
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1     ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *)           echo "'$1' cannot be extracted via ex()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-
-# better yaourt colors
-export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=10000
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-open() {
-    nohup nautilus -w $1 > /dev/null 2>&1 &
-}
-
-function getipaddress {
-    ip route get 8.8.8.8 | awk '{print $7; exit}'
-}
-
-function toclipboard {
-if [ -z "$1" ]; then
-    echo "Usage: toclipboard <filename>"
-else
-    xclip -sel clip < $1
-fi
-}
-
-if command -v tmux>/dev/null; then
-  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
-
-# Bash-completion for psql services
-_complete_psql() {
-    services=$(egrep -o '^\[.+\]' ~/.pg_service.conf | cut -f2 -d[ | cut -f1 -d] | sort)
-    if [[ $services ]]
-    then
-        COMPREPLY=( $( compgen -W "$services" -- ${COMP_WORDS[COMP_CWORD]}) )
-    else
-        echo
-        echo "(no services)"
-        echo -n "> ${COMP_WORDS} "
-    fi
-    return 0
-}
-complete -F _complete_psql psql
+# history
+alias bb='rlwrap --history-filename=$HOME/.${USER}_command_history bb'

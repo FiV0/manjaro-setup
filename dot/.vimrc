@@ -1,206 +1,310 @@
-set belloff=all
-
+"Vundle
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+
 
 " let Vundle manage Vundle, required
-" Plugin 'davidhalter/jedi-vim'
-" Plugin 'chrisbra/csv.vim'
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'dhruvasagar/vim-table-mode'
-Plugin 'dpelle/vim-LanguageTool'
-Plugin 'edkolev/tmuxline.vim'
-Plugin 'embear/vim-localvimrc'
-Plugin 'jalvesaq/Nvim-R'
-Plugin 'rhysd/vim-grammarous'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+"Plugin 'SirVer/ultisnips'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+"Plugin 'slime/slime'
+"Plugin 'l04m33/vlime', {'rtp': 'vim/'}
+Plugin 'kovisoft/slimv'
+Plugin 'kovisoft/paredit'
+Plugin 'vim-scripts/indentpython.vim'
 Plugin 'tpope/vim-surround'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'zxqfl/tabnine-vim'
-Plugin 'vim-latex/vim-latex'
-Plugin 'preservim/tagbar'
+Plugin 'flazz/vim-colorschemes'
+"Plugin 'tpope/vim-fireplace'
+Plugin 'elzr/vim-json'
+"javascript indentation
+"Plugin 'lukaszb/vim-web-indent'
+Plugin 'othree/yajs.vim'
+"Plugin 'marijnh/tern_for_vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'scrooloose/nerdcommenter'
+
+" All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-" let g:gruvbox_contrast_dark='neutral'
-" colorscheme gruvbox
-" set background=dark
-let g:airline_theme='ubaryd'
-" show all open buffers on top
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#tab_nr_type = 1
-" nice looking things
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = '|'
-if !exists('g:airline_symbols')
-let g:airline_symbols = {}
-endif
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
+" Remove trailing whitespaces on save
+autocmd BufWritePre * %s/\s\+$//e
 
-if has("syntax")
-    syntax enable
-endif
+"let g:ycm_server_keep_logfiles = 1
+"let g:ycm_server_log_level = 'debug'
 
-if has("autocmd")
-    " Jump to the last position when reopening a file
-    "au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    " Load indentation rules and plugins according to the detected filetype.
-    " Note these are essential for r-plugin!
-    filetype plugin on
-    " filetype indent on " set above for vundle
-endif
-
-set showcmd		    " Show (partial) command in status line.
-set showmatch		" Show matching brackets.
-set ignorecase		" Do case insensitive matching
-set smartcase		" Do smart case matching
-set incsearch		" Incremental search
-
-" Extra config lines 
-set modelines=0
+"custom vim commands
+set number
+set smartindent
 set tabstop=2
 set shiftwidth=2
-set softtabstop=2
 set expandtab
-set autoindent
-set ruler
-set relativenumber
-set nu "line numbering
-set wrap
-set textwidth=80
-" let &colorcolumn=81
-" let &colorcolumn=join(range(81,999),",")
-set nojoinspaces
-set undofile
-set undodir=$HOME/.vim/undo-dir
-set undolevels=1000
-set undoreload=10000
-"global searches, so :%s/foo/bar/g automatically becomes :%s/foo/bar
-set gdefault 
-"automatically highlight searching
-set hlsearch 
-" Height of the command bar
-set cmdheight=2
+set autochdir
+set shell=/bin/sh
 set backspace=indent,eol,start
+set splitbelow
+set splitright
+" for squashed lines
+set linespace=6
+set formatoptions=cr
+syntax on
 
-set path+=**
+"menu
 set wildmenu
-set wildmode=list:full
+set wildmode=full
+"source $VIRRUNTIME/menu.vim
 
-" Spell checking
-autocmd FileType latex,tex,md,markdown,rmd set spell
-autocmd FileType tex :TagbarOpen
-set complete +=k
 
-" Configuration for https://github.com/airblade/vim-gitgutter
-set updatetime=30
 
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! w !sudo tee > /dev/null %
+map <A-Left> :tabprevious<CR>
+map <A-Right> :tabnext<CR>
+map <A-Up> :tabnew<CR>
+map <A-Down> :q<CR>
+"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :vsp<CR>
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+""noremap <C-w> <C-w>w
+"inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+"inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 
-nnoremap <C-L> :nohls<cr>
+"leader
+let mapleader = ','
+let maplocalleader = '.'
 
-" Language tool
-let g:languagetool_jar='~/.vim/bundle/vim-grammarous/misc/LanguageTool-4.5/languagetool.jar'
-nmap gn :lnext<CR>
-nmap gp :lprevious<CR>
-let g:grammarous#show_first_error = 1
+"syntastic
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_enable_highlighting = 1
+"let g:syntastic_enable_signs        = 1
+let g:syntastic_cpp_compiler = 'g++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+"let g:syntastic_cpp_compiler_options = ' echo | clang -std=c++11 -stdlib=libc++ -v -E -x c++ -'
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_pylint_args = '-E'
 
-" insert timestamp to document
-nnoremap <buffer> <F4> :r! date "+\%Y-\%m-\%d \%H:\%M:\%S"<cr>
+"Lisp stuff
+"
+"Slime
+let g:slime_target = "screen"
+"slimv
+let g:slimv_repl_split=4
+"let g:slimv_repl_split_size=20
+"let g:slimv_swank_cmd = '! xterm -e sbcl --load /home/fv/.vim/bundle/slime/start-swank.lisp &'
+"let g:slimv_menu = 1
+let g:paredit_electric_return=0
+"vlime
+let g:vlime_enable_autodoc = v:true
+let g:vlime_window_settings = {
+      \ 'repl': {
+        \ 'size' : 25
+      \ },
+      \ 'sldb': {
+        \ 'pos': 'belowright',
+      \ },
+      \ 'inspector': {
+        \ 'pos': 'belowright',
+        \ 'vertical': v:true
+      \ },
+      \ 'preview': {
+        \ 'pos': 'belowright',
+        \ 'size': v:null,
+        \ 'vertical': v:true
+      \ }
+    \ }
+"vlime has it's on identation
+"autocmd BufRead,BufNewFile *.lisp filetype indent off
+autocmd FileType lisp set colorcolumn=80
+"slimv usual mapped interrupt does not work
+autocmd FileType lisp noremap ,z :call SlimvInterrupt()<CR>
+"slimv to reopen repl buffer in new tab
+autocmd FileType lisp noremap ,2 :call SlimvOpenBuffer('REPL')<CR>
 
-" autocomplete nested parantheses, etc.
-inoremap ( ()<Esc>i
-inoremap [ []<Esc>i
-inoremap { {}<Esc>i
-autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
-inoremap ) <c-r>=ClosePair(')')<CR>
-inoremap ] <c-r>=ClosePair(']')<CR>
-inoremap } <c-r>=ClosePair('}')<CR>
-inoremap " <c-r>=QuoteDelim('"')<CR>
-inoremap ' <c-r>=QuoteDelim("'")<CR>
+" Commenting blocks of code.
+autocmd FileType c,cpp,java,scala,gradle,javascript let b:comment_leader = '// '
+autocmd FileType sh,ruby,python          let b:comment_leader = '# '
+" autocmd FileType conf,fstab       let b:comment_leader = '# '
+" autocmd FileType tex              let b:comment_leader = '% '
+" autocmd FileType mail             let b:comment_leader = '> '
+" autocmd FileType vim              let b:comment_leader = '" '
+autocmd filetype lisp,clojure            let b:comment_leader = ';; '
+if !exists("b:comment_leader")
+  noremap <silent> \c :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+  noremap <silent> \C :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
+endif
 
-function ClosePair(char)
- if getline('.')[col('.') - 1] == a:char
- return "\<Right>"
- else
- return a:char
- endif
-endf
 
-function CloseBracket()
- if match(getline(line('.') + 1), '\s*}') < 0
- return "\<CR>}"
- else
- return "\<Esc>j0f}a"
- endif
-endf
+"syntax checking wiht YCM
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_server_python_interpreter = '/usr/bin/python'
+"let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_always_populate_location_list = 1
+let g:ycm_error_symbol = "✗"
+let g:ycm_warning_symbol = "⚠"
+let g:ycm_filetype_blacklist = { 'lisp': 1 }
+map <leader>o :lopen<CR>
+map <leader>c :lclose<CR>
+map <leader>j :lnext<CR>
+map <leader>k :lprevious<CR>
 
-function QuoteDelim(char)
- let line = getline('.')
- let col = col('.')
- if line[col - 2] == "\\"
- "Inserting a quoted quotation mark into the string
- return a:char
- elseif line[col - 1] == a:char
- "Escaping out of the string
- return "\<Right>"
- else
- "Starting a string
- return a:char.a:char."\<Esc>i"
- endif
-endf
+" compiling
+autocmd filetype python nnoremap <F4> :w <bar> exec '!python '.shellescape('%')<CR>
+autocmd filetype c nnoremap <F4> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+autocmd filetype cpp nnoremap <F4> :w <bar> exec '!g++ -std=c++0x -O2 '.shellescape('%').' -o '.shellescape('%:r').' <CR>
+autocmd filetype cpp nnoremap <F5> :w <bar> exec '!g++ -std=c++0x -g '.shellescape('%').' -o a.out' <CR><CR>
 
-:map <F3> :call WC()<CR>
-function! WC()
-    let filename = expand("%")
-    let cmd = "detex " . filename . " | wc -w | tr -d [:space:]"
-    let result = system(cmd)
-    echo result . " words"
+"python spaces
+autocmd filetype python set tabstop=4|set shiftwidth=4|set expandtab|set cindent
+"au BufNewFile,BufRead *.py
+"     set tabstop=4
+"     set softtabstop=4
+"     set shiftwidth=4
+"     set textwidth=79
+"     set expandtab
+"     set autoindent
+"     set fileformat=unix
+
+"Lisp
+"function RemoveLeadingWhitespaces( c )
+"  if a:c == ')'
+"
+"  endif
+"endfunction
+"
+"autocmd filetype lisp nnoremap <leader>) :call RemoveLeadingWhitespaces(matchstr(getline('.'), '\%' . col('.') . 'c.')) <CR>
+
+"Clojure
+"let g:slimv_swank_clojure = '! xterm -e lein swank &'
+"let g:slimv_disable_clojure = 1
+
+"OCaml
+"VimShell for OCaml
+"open shell
+map <C-o> :VimShellInteractive<CR><ESC><C-w>w
+"send line
+map <leader>s :VimShellSendString<CR>
+"send paragraph
+map <leader>p vip<leader>s<CR><ESC>
+"send full file
+map <leader>f 1GVG<leader>s <CR>
+"get type of elem undor cursor currently not working
+"map <leader>t :TypeOf<CR>
+
+"eclim
+"let g:EclimCompletionMethod = 'omnifunc'
+"let g:EclimLogLevel = 'error'
+
+"merlin
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
+execute "set rtp+=" . g:opamshare . "/merlin/vimbufsync"
+
+"eliom
+au BufEnter *.eliom set ft=ocaml
+
+"merlin with Syntastic
+"autocmd filetype ocaml let g:syntastic_ocaml_checkers = ['merlin']
+au BufEnter *.ml,*.mli let g:syntastic_ocaml_checkers = ['merlin']
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'ocaml': { 'left': '(*','right': '*)' }, 'eliom': { 'left': '(*','right': '*)' } }
+
+"ocp-indent-vim
+au BufEnter *.ml,*.mli setf ocaml
+set rtp+=~/.vim/bundle/ocp-indent-vim
+autocmd filetype ocaml set expandtab
+autocmd filetype ocaml nnoremap <F4> :w <bar> exec '!ocamlbuild -use-ocamlfind -no-hygiene '.shellescape('%:r').'.native' <CR><CR>
+autocmd filetype ocaml call FT_ocaml()
+function FT_ocaml()
+    "set textwidth=80
+    set colorcolumn=80
+    set shiftwidth=2
+    set tabstop=2
+    " ocp-indent with ocp-indent-vim
+    let opamshare=system("opam config var share | tr -d '\n'")
+    execute "autocmd FileType ocaml source".opamshare."/ocp-indent/vim/indent/ocaml.vim"
+    filetype indent on
+    filetype plugin indent on
 endfunction
 
-"----------------------------------------
-"-------------   Nvim-R   ---------------
-"----------------------------------------
+"colorscheme
+colorscheme 256-jungle
 
-" https://github.com/jcfaria/Vim-R-plugin/issues/204
-let g:ScreenImpl = 'Tmux'
-let g:ScreenShellInitialFocus = 'shell'
-" send selection to R with space bar
-vmap <Space> <Plug>RDSendSelection
-" send line to R with space bar
-nmap <Space> <Plug>RDSendLine
-
-" stop the plugin remapping underscore to '->':
-let R_assign = 0
-
-let R_silent_term = 1
-
-let g:R_in_buffer = 1
-"let g:R_rconsole_width = winwidth("%") / 2
-let g:R_rconsole_width = 100
-let g:R_nvimpager = "horizontal"
-let R_args = ['--no-save', '--quiet']
-let R_tmux_title = 'R'
-let g:R_notmuxconf = 1 "use my .tmux.conf, not the Nvim-r one
-
-let r_syntax_folding = 0
-
-" localvimrc
-let g:localvimrc_ask = 0
-
-" vim-latex
-let g:Imap_UsePlaceHolders = 0
-let g:Tex_SmartKeyQuote = 0
+"set tags=./tags;/
+"set splitright
+"
+""auto update for ctags
+"function! DelTagOfFile(file)
+"  let fullpath = a:file
+"  let cwd = getcwd()
+"  let tagfilename = cwd . "/tags"
+"  let f = substitute(fullpath, cwd . "/", "", "")
+"  let f = escape(f, './')
+"  let cmd = 'sed -i "/' . f . '/d" "' . tagfilename . '"'
+"  let resp = system(cmd)
+"endfunction
+"
+"function! UpdateTags()
+"  let f = expand("%:p")
+"  let cwd = getcwd()
+"  let tagfilename = cwd . "/tags"
+"  let cmd = 'ctags -a -f ' . tagfilename . ' --c++-kinds=+p --fields=+iaS --extra=+q ' . '"' . f . '"'
+"  call DelTagOfFile(f)
+"  let resp = system(cmd)
+"endfunction
+"autocmd BufWritePost *.cpp,*.h,*.c call UpdateTags()
+"
+""NeoBundle Scripts-----------------------------
+"if has('vim_starting')
+"  set nocompatible               " Be iMproved
+"
+"  " Required:
+"  set runtimepath+=/home/fv/.vim/bundle/neobundle.vim/
+"endif
+"
+"" Required:
+"call neobundle#begin(expand('/home/fv/.vim/bundle'))
+"
+"" Let NeoBundle manage NeoBundle
+"" Required:
+"NeoBundleFetch 'Shougo/neobundle.vim'
+"
+"" Add or remove your Bundles here:
+"NeoBundle 'Shougo/neosnippet.vim'
+"NeoBundle 'Shougo/neosnippet-snippets'
+"NeoBundle 'tpope/vim-fugitive'
+"NeoBundle 'kien/ctrlp.vim'
+"NeoBundle 'flazz/vim-colorschemes'
+"
+"" You can specify revision/branch/tag.
+"NeoBundle 'Shougo/vimproc.vim', {
+"	      \ 'build' : {
+"	      \     'windows' : 'tools\\update-dll-mingw',
+"	      \     'cygwin' : 'make -f make_cygwin.mak',
+"	      \     'mac' : 'make -f make_mac.mak',
+"	      \     'unix' : 'make -f make_unix.mak',
+"	      \    },
+"	      \ }
+"NeoBundle 'Shougo/vimshell'
+"
+"
+"" Required:
+"call neobundle#end()
+"
+"
+"" If there are uninstalled bundles found on startup,
+"" this will conveniently prompt you to install them.
+"NeoBundleCheck
+""End NeoBundle Scripts-------------------------
