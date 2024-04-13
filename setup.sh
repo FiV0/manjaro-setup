@@ -93,7 +93,7 @@ function quit {
 }
 
 #RUN
-check_dependencies
+# check_dependencies
 while :
 do
   main
