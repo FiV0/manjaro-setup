@@ -10,6 +10,6 @@ function ssh-key-setup
     show_info 'Copy the following public to Github, Gitlab, etc. '
     cat ~/.ssh/id_ed25519.pub
     show_info 'Press enter to continue'
-    read -p
+    read
     main
 }
