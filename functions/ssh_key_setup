@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install packages listed in 'data/aur-packages.list'
-function ssh-keygen
+function ssh-key-setup
 {
     show_info 'Generating new ssh key...'
     ssh-keygen -t ed25519 -N "" -C $EMAIL

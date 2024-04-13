@@ -62,7 +62,7 @@ DIR="$(dirname "$0")"
 . $DIR/functions/doall
 . $DIR/functions/packages
 . $DIR/functions/aur
-. $DIR/functions/ssh_keygen
+. $DIR/functions/ssh_key_setup
 
 # Main
 function main {
@@ -72,11 +72,11 @@ function main {
         --menu "\nWhat would you like to do?" \
         --cancel-button "Quit" \
         $LINES $COLUMNS $(( $LINES - 12 )) \
-        doall       '1. Do all (non-interactive)' \
-        packages    '2. Install pacman packages' \
-        aurpackages '3. Install AUR packages' \
-        ssh-keygen  '4. Generate a new ssh key' \
-        configure   '5. Configure system' \
+        doall         '1. Do all (non-interactive)' \
+        packages      '2. Install pacman packages' \
+        aurpackages   '3. Install AUR packages' \
+        ssh-key-setup '4. Generate a new ssh key' \
+        configure     '5. Configure system' \
         3>&1 1>&2 2>&3)
 
     exitstatus=$?
