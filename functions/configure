@@ -11,6 +11,9 @@ function configure {
     cp dot/.inputrc "$HOME/"
     cp dot/.emacs-profiles.el "$HOME/"
 
+    show_info 'Copying monokai-theme to xfce4 colorschemes'
+    cp data/monokai-dark.theme /usr/share/xfce4/terminal/colorschemes
+
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     vim +PluginInstall +qall
 
