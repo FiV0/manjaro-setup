@@ -6,8 +6,9 @@
 [[ $- != *i* ]] && return
 
 alias ls='ls --color=auto'
+PS1="\[\e[0;32m\]\u@\h:\[\e[0;34m\]\w\[\e[0m\]$ "
 #PS1="\e\[\033[01;32m\][\u@\h \W]\$ \e[m"
-PS1='[\u@\h \W]\$ '
+#PS1='[\u@\h \W]\$ '
 
 # fzf
 source /usr/share//fzf/key-bindings.bash
