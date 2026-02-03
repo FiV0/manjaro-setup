@@ -7,7 +7,9 @@ docker
 docker-compose
 emacs
 fd
+fish
 fzf
+ghostty
 git
 git-completion
 git-lfs

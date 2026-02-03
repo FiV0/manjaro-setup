@@ -1,4 +1,6 @@
 babashka-bin
+claude-code
+claude-desktop-bin
 clj-kondo-bin
 ghq
 nordic-darker-theme
