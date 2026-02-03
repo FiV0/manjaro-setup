@@ -36,3 +36,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # history
 alias bb='rlwrap --history-filename=$HOME/.${USER}_command_history bb'
+
+export JAVA_HOME='/usr/lib/jvm/java-21-openjdk'
+BROWSER=/usr/bin/firefox
